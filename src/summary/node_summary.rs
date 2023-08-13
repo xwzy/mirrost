@@ -12,6 +12,25 @@ pub struct NodeSummary {
     pub file_type: file::FileType,
 }
 
+impl NodeSummary {
+    pub fn new(full_file_path: &str, parent_dir: &str) -> NodeSummary {
+        let file_name = file::get_file_name(full_file_path);
+        let relative_file_path = file::get_relative_file_path(full_file_path, parent_dir);
+        let md5 = md5::get_file_md5(full_file_path).unwrap_or_default();
+        let file_size = file::get_file_size(full_file_path);
+        let file_type = file::get_file_type(full_file_path);
+
+        NodeSummary {
+            full_file_path: full_file_path.to_string(),
+            relative_file_path,
+            file_name,
+            md5,
+            file_size,
+            file_type,
+        }
+    }
+}
+
 pub fn get_node_summary(full_file_path: &str, parent_dir: &str) -> Result<NodeSummary, Error> {
     let file_name = file::get_file_name(full_file_path);
     let relative_file_path = file::get_relative_file_path(full_file_path, parent_dir);
